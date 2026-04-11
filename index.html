@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayne Engine</title>
+    <style>
+:root {
+    --bg-color: #f8f9fa;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --text-primary: #4285f4;
+    --text-secondary: #70757a;
+    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --text-primary: #60a5fa;
+        --text-secondary: #94a3b8;
+        --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 50% 50%, rgba(66, 133, 244, 0.1) 0%, transparent 50%);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding-top: 10vh;
+    min-height: 100vh;
+    transition: background 0.3s ease;
+}
+
+.search-container {
+    width: 90%;
+    max-width: 800px;
+    padding: 50px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px); /* The "Cool" Frosted Glass effect */
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow);
+    border-radius: 24px;
+    text-align: center;
+}
+
+h1 {
+    color: var(--text-primary);
+    font-size: 3.5rem;
+    margin-bottom: 8px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    text-shadow: 0 0 20px rgba(66, 133, 244, 0.3);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Google Search Styling Overrides */
+.gsc-control-cse {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+}
+
+.gsc-input-box {
+    border: 2px solid rgba(66, 133, 244, 0.2) !important;
+    border-radius: 12px 0 0 12px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+.gsc-input-box-focus {
+    box-shadow: 0 0 15px rgba(66, 133, 244, 0.4) !important;
+    border-color: var(--text-primary) !important;
+}
+
+button.gsc-search-button-v2 {
+    background-color: var(--text-primary) !important;
+    border-radius: 0 12px 12px 0 !important;
+    padding: 12px 25px !important;
+    transition: transform 0.2s ease !important;
+}
+
+button.gsc-search-button-v2:hover {
+    transform: scale(1.05);
+}
+
+/* Fix for search text in Dark Mode */
+.gsc-input {
+    color: var(--text-secondary) !important;
+}
+
+/* Force Google Results to be Dark/Transparent */
+.gsc-results-wrapper-overlay, 
+.gsc-results-wrapper-visible, 
+.gsc-webResult.gsc-result, 
+.gsc-results .gsc-imageResult,
+.gsc-control-cse,
+.gsc-control-cse-en {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Fix the white result "cards" */
+.gsc-webResult.gsc-result {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 15px !important;
+}
+
+/* Change result text colors so they are readable on dark */
+.gs-title, .gs-title * {
+    color: #60a5fa !important; /* Bright blue for links */
+    text-decoration: none !important;
+}
+
+.gs-snippet, .gs-promotion-snippet {
+    color: #94a3b8 !important; /* Grayish white for description */
+}
+
+.gs-visibleUrl {
+    color: #34d399 !important; /* Green for the URL */
+}
+
+/* Fix the white "Web" and "Image" tabs */
+.gsc-tabsArea, .gsc-tabHeader {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.gsc-tabHeader.gsc-tabhActive {
+    border-bottom: 2px solid #4285f4 !important;
+    background-color: rgba(66, 133, 244, 0.1) !important;
+}
+
+/* Fix for the white search bar background */
+.gsc-input-box, 
+table.gsc-search-box, 
+.gsc-input-box td, 
+.gsc-input-box table {
+    background-color: transparent !important;
+}
+
+/* This targets the actual text input field */
+input.gsc-input, 
+.gsc-input-box input.gsc-input {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    text-indent: 10px !important;
+}
+
+/* Removes the white background from the "X" (clear) button */
+.gsst_b {
+    background-color: transparent !important;
+}
+
+/* Fix for the search button cell background */
+.gsc-search-button {
+    background-color: transparent !important;
+}
+
+/* Fix for the Autocomplete/Suggestions dropdown */
+.gstl_50.gssb_c {
+    z-index: 9999 !important;
+}
+
+.gssb_m {
+    background-color: var(--card-bg) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow) !important;
+    overflow: hidden !important;
+    margin-top: 5px !important;
+}
+
+/* Suggestion text color */
+.gsq_a td {
+    color: var(--text-secondary) !important;
+    padding: 10px 15px !important;
+    cursor: pointer !important;
+}
+
+/* Hover effect for a specific suggestion */
+.gssb_i {
+    background-color: rgba(66, 133, 244, 0.2) !important;
+}
+
+/* Hide that weird white border Google adds to the table */
+.gssb_e {
+    border: none !important;
+    background: transparent !important;
+}
+
+/* The "Hammer" to force the suggestions to go dark */
+.gssb_m, 
+.gssb_m tr, 
+.gssb_m td, 
+.gssb_a, 
+.gssb_a td, 
+.gsq_a, 
+.gsq_a td {
+    background-color: #1e293b !important; /* Solid dark color for compatibility */
+    color: #94a3b8 !important;
+}
+
+/* Specific hover fix for suggestions */
+.gssb_i td, 
+.gssb_i td span {
+    background-color: #334155 !important;
+    color: #60a5fa !important;
+}
+
+/* This targets the container Google injects at the bottom of the body */
+[class*="gstl_"] {
+    background: transparent !important;
+}
+
+/* Force the text inside suggestions to be light blue/white */
+.gsc-completion-container {
+    background-color: #1e293b !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.gsc-completion-selected {
+    background-color: #334155 !important;
+}
+
+/* Center the entire image results area */
+.gsc-image-results-container {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding-top: 20px !important;
+}
+
+/* Fix the grid alignment and spacing */
+.gsc-results .gsc-imageResult {
+    display: inline-block !important;
+    vertical-align: top !important;
+    float: none !important; /* Switching from float to inline-block for better centering */
+    width: calc(33.33% - 20px) !important; 
+    margin: 10px !important;
+    box-sizing: border-box !important;
+}
+
+/* Fix the gray/white hover label (the one showing dimensions) */
+.gs-imageResult .gs-text-box {
+    background-color: rgba(15, 23, 42, 0.9) !important; /* Dark slate */
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.gs-imageResult .gs-text-box .gs-title {
+    color: #60a5fa !important;
+    font-size: 11px !important;
+}
+
+/* Make the actual image container look like a sleek gallery card */
+.gsc-imageResult .gsc-imageResult-column {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+/* Responsive fix: 2 columns on tablets, 1 on mobile */
+@media (max-width: 600px) {
+    .gsc-results .gsc-imageResult {
+        width: calc(50% - 20px) !important;
+    }
+}
+@media (max-width: 400px) {
+    .gsc-results .gsc-imageResult {
+        width: 100% !important;
+        margin: 10px 0 !important;
+    }
+}
+
+/* Hide the "SafeSearch" and "Sort by" text if it's still white */
+.gsc-result-info, .gsc-orderby-label {
+    color: var(--text-secondary) !important;
+}
+
+/* Fix the Pagination (Page Numbers) */
+.gsc-cursor-box {
+    border: none !important;
+    margin-top: 20px !important;
+    text-align: center !important;
+}
+
+/* Individual numbers */
+.gsc-cursor-page {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-secondary) !important;
+    padding: 8px 14px !important;
+    margin: 0 4px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: all 0.2s ease !important;
+}
+
+/* The active/current page number */
+.gsc-cursor-current-page {
+    background-color: var(--text-primary) !important;
+    color: white !important;
+    border-color: var(--text-primary) !important;
+    font-weight: bold !important;
+}
+
+/* Hover effect for page numbers */
+.gsc-cursor-page:hover {
+    background-color: rgba(66, 133, 244, 0.2) !important;
+    border-color: var(--text-primary) !important;
+    color: white !important;
+}
+
+/* Hide the ugly underline Google adds to numbers */
+.gsc-cursor-page {
+    text-decoration: none !important;
+}
+
+/* Custom Scrollbar for the whole page and result containers */
+::-webkit-scrollbar {
+    width: 8px; /* Width of the vertical scrollbar */
+    height: 8px; /* Height of the horizontal scrollbar */
+}
+
+/* The track (background of the scrollbar) */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* The handle (the part you grab) */
+::-webkit-scrollbar-thumb {
+    background: rgba(66, 133, 244, 0.2); /* Faded blue to match theme */
+    border-radius: 10px;
+    border: 2px solid transparent; /* Creates padding effect */
+    background-clip: content-box;
+}
+
+/* Hover effect on the handle */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(66, 133, 244, 0.5); /* Brightens when you touch it */
+}
+
+/* FireFox Support */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(66, 133, 244, 0.3) transparent;
+}
+    </style>
+</head>
+<body>
+
+    <div class="search-container">
+        <h1>Nova Search</h1>
+        <div class="subtitle">Custom Search Interface</div>
+
+        <script async src="https://cse.google.com/cse.js?cx=e44113464e8d747e9"></script>
+        
+        <div class="gcse-search"></div>
+    </div>
+
+    <script>
+        // JavaScript Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Search engine interface loaded.");
+            
+            // You can add custom logic here, such as tracking 
+            // clicks or modifying the UI dynamically.
+        });
+    </script>
+
+</body>
+</html>
